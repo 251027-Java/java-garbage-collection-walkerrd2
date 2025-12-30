@@ -22,7 +22,19 @@ public class MemoryLabApp {
         // 3. Handle OutOfMemoryError gracefully
         // 4. Add a small delay between allocations for observation
 
-        // Your code here:
+        final int CHUNK_SIZE = 1024 * 1024; // 1MB
+        int count = 0;
+        try {
+            while (true) {
+                memoryBlocks.add(new byte[CHUNK_SIZE]);
+                count++;
+                printMemoryStatus("After allocation " + count);
+                Thread.sleep(500); // 0.5 second delay
+            }
+        } catch (OutOfMemoryError e) {
+            System.out.println("OutOfMemoryError caught after " + count + " allocations.");
+            printMemoryStatus("OutOfMemoryError");
+        }
 
         printMemoryStatus("Final");
     }

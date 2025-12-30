@@ -28,9 +28,9 @@ java -Xms128m -Xmx256m -Xlog:gc*:file=gc.log:time,uptime MemoryLabApp
 ```
 
 **Questions to Answer**:
-1. How many Minor GCs occurred?
-2. How many Major/Full GCs occurred?
-3. What was the longest GC pause time?
+1. How many Minor GCs occurred? 15
+2. How many Major/Full GCs occurred? 22
+3. What was the longest GC pause time? Pause Full (G1 Compaction Pause) 253M -> 253M(256M) 24.773ms
 
 ### Task 3: Compare Garbage Collectors
 Run the application with different GC algorithms:
@@ -50,9 +50,9 @@ java -XX:+UseZGC -Xmx256m -Xlog:gc*:file=gc-zgc.log MemoryLabApp
 
 | GC Type | Total GC Events | Longest Pause | Throughput |
 |---------|-----------------|---------------|------------|
-| Serial  |                 |               |            |
-| G1GC    |                 |               |            |
-| ZGC     |                 |               |            |
+| Serial  |      12         | 44.138ms      |   89.98%   |
+| G1GC    |      36         | 10.130ms      |   43.47%   |
+| ZGC     |      13         | 00.039ms      |   78.23%   |
 
 ### Task 4: Tune for Low Latency
 Configure G1GC to target a maximum pause time of 100ms:
@@ -62,8 +62,8 @@ java -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Xmx256m MemoryLabApp
 ```
 
 **Questions**:
-1. Did G1GC achieve the target pause time?
-2. What trade-offs did you observe?
+1. Did G1GC achieve the target pause time? Yes; longest was 10.13ms
+2. What trade-offs did you observe? small collections and full compactions were performed, many "Pause Young" and "Pause Full", while pause times are short, collector may run more often, increasing overall CPU usage and reducing Throughput
 
 ## Deliverables
 1. Completed `MemoryLabApp.java`
